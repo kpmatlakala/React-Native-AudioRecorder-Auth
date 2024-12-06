@@ -2,12 +2,10 @@ import React from 'react'
 import { Slot, Stack } from "expo-router";
 import { SessionProvider } from '@/context/Authcontext';
 
-// import { SessionProvider } from '../ctx';
-
 const auth_layout = () => {
   return (
     <SessionProvider>
-        <Stack screenOptions={{ headerShown: false, headerBackTitleStyle: false}}>        
+        {/* <Stack screenOptions={{ headerShown: false, headerBackTitleStyle: false}}>        
             <Stack.Screen name="(auth)" 
               options={{ title: "Signin", headerTitleAlign: "center", headerStyle:{ backgroundColor:"wheat"}, headerBackTitleStyle: false }} />
 
@@ -16,9 +14,9 @@ const auth_layout = () => {
 
             <Stack.Screen name="+not-found" 
               options={{ title: "404", headerTitleAlign: "center", headerStyle:{ backgroundColor:"wheat"}, headerBackTitleStyle: false }} />
-        </Stack>
+        </Stack> */}
         
-        {/* <Slot /> */}
+        <Slot />
          
     </SessionProvider>
     

@@ -6,8 +6,6 @@ import RecordingProvider from "@/context/RecordingsContext";
 import { useSession } from "@/context/Authcontext";
 import { Text } from "react-native";
 
-
-
 export default function Layout() { 
 
   const [user, setUser] = useState({username:"", email:"", isLoggedIn: false });
