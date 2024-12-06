@@ -7,16 +7,18 @@ import { SessionProvider } from '@/context/Authcontext';
 const auth_layout = () => {
   return (
     <SessionProvider>
-        {/* <Stack>        
-            <Stack.Screen name="login" 
+        <Stack screenOptions={{ headerShown: false, headerBackTitleStyle: false}}>        
+            <Stack.Screen name="(auth)" 
               options={{ title: "Signin", headerTitleAlign: "center", headerStyle:{ backgroundColor:"wheat"}, headerBackTitleStyle: false }} />
+
             <Stack.Screen name="register" 
               options={{ title: "Create Account", headerTitleAlign: "center", headerStyle:{ backgroundColor:"wheat"}, headerBackTitleStyle: false }} />
+
             <Stack.Screen name="+not-found" 
               options={{ title: "404", headerTitleAlign: "center", headerStyle:{ backgroundColor:"wheat"}, headerBackTitleStyle: false }} />
-        </Stack> */}
+        </Stack>
         
-        <Slot />
+        {/* <Slot /> */}
          
     </SessionProvider>
     

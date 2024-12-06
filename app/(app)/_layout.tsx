@@ -22,7 +22,8 @@ export default function Layout() {
   if(!session)
   {
     return <Redirect href={{ pathname: "/login", }} />
-  }  
+  }
+  
 
   return (
     <>  
@@ -47,6 +48,13 @@ export default function Layout() {
               name="playback/index"
               options={{
                 drawerLabel: "🎧 Playback",
+                title: "Playback",
+              }}
+            />
+            <Drawer.Screen
+              name="profile"
+              options={{
+                drawerLabel: "👤 Profile",
                 title: "Playback",
               }}
             />
