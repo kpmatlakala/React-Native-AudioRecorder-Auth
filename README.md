@@ -51,30 +51,33 @@ Join our community of developers creating universal apps.
 
 **********************************************************************************************************
 Activity 3– Practice Set React-Native
-Re: Audio recording app – we will continue on the previous Digital Journal App by adding the
+
+> Re: Audio recording app – we will continue on the previous Digital Journal App by adding the
 below features.
-● Login and registration.
-● Protected routes (Auth)
-● Profile page.
+
+- Login and registration.
+- Protected routes (Auth)
+- Profile page.
+
 Additional Features for Audio Recording App:
-● Login and Registration:
-○ Implement a user authentication system with login and registration functionality.
-● Protected Routes:
-○ Secure certain routes in the app that require authentication to access (e.g., profile,
+- Login and Registration:
+   * Implement a user authentication system with login and registration functionality.
+- Protected Routes:
+   * Secure certain routes in the app that require authentication to access (e.g., profile,
 settings).
-● Profile Page:
-○ Create a profile page where users can view and edit their personal information.
-● User Settings (optional):
-○ Allow users to customise app settings such as notification preferences, theme, etc.
-● User Feedback:
-○ Include a feature for users to provide feedback or report issues.
-● Social Sharing:
-○ Enable users to share their recorded voice notes on social media platforms.
-● Cloud Integration:
-○ Integrate with cloud storage services (e.g., Google Drive, Dropbox) to backup and
+- Profile Page:
+   * Create a profile page where users can view and edit their personal information.
+- User Settings (optional):
+   * Allow users to customise app settings such as notification preferences, theme, etc.
+- User Feedback:
+   * Include a feature for users to provide feedback or report issues.
+- Social Sharing:
+   * Enable users to share their recorded voice notes on social media platforms.
+- Cloud Integration:
+   * Integrate with cloud storage services (e.g., Google Drive, Dropbox) to backup and
 sync voice notes across devices.
-● Offline Playback:
-○ Allow users to listen to their voice notes offline without an internet connection.
-● User Privacy:
-○ Ensure user data is protected and adhere to privacy regulations (e.g., GDPR, CCPA,
+- Offline Playback:
+   * Allow users to listen to their voice notes offline without an internet connection.
+- User Privacy:
+   * Ensure user data is protected and adhere to privacy regulations (e.g., GDPR, CCPA,
 POPI, etc).
