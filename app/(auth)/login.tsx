@@ -1,4 +1,5 @@
-import { useSession } from '@/context/Authcontext';
+import { useSession } from '@/context/AuthContext';
+import Icons from '@/utils/Icons';
 import { Link, router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
@@ -26,8 +27,35 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.title}>Login</Text> */}
-      <TextInput
+      <View style={styles.header}>
+        {/* <Text style={styles.logo}>🎙️</Text> */}
+        <Text style={styles.logo}>
+          <Icons name="microphone" size={86} color="#FF004D" />
+        </Text>
+        <Text style={styles.title}>Audio Recorder</Text> 
+      </View> 
+
+      <View style={styles.h_btnContainer}>
+        <Pressable style={styles.buttonGuest}      
+          onPress={() => { router.push("/register"); } }>
+          <Link href="/"
+              style={styles.buttonGuestText}>Continue as Guest
+          </Link>
+        </Pressable>
+
+        <Pressable style={styles.buttonGoogle}      
+          onPress={() => { router.push("/register"); } }>
+          <Link href="/register"
+            style={styles.buttonGoogleText}>
+              <Icons name="google" />
+          </Link>
+        </Pressable>
+      </View>
+
+      <Text style={{color:"grey", fontWeight:"bold"}}>OR</Text>
+
+      <View></View>
+      <TextInput placeholderTextColor={"grey"}
         style={styles.input}
         placeholder="Email"
         value={email}
@@ -35,7 +63,7 @@ export default function LoginScreen() {
         keyboardType="email-address"
         autoCapitalize="none"
       />
-      <TextInput
+      <TextInput placeholderTextColor={"grey"}
         style={styles.input}
         placeholder="Password"
         value={password}
@@ -50,21 +78,9 @@ export default function LoginScreen() {
         <Text style={styles.infoText}>Don't have an account?</Text>
         <Pressable onPress={() => console.log("Attempt  Register-Navigation")}>
           <Link href={{ pathname:"/register", params: {from: "login", redirectTo: "home"}}}
-            style={styles.linkText}>Register here</Link>
+            style={styles.linkText}> Register Now</Link>
         </Pressable>
       </View>
-      <Text>OR</Text>
-      <Pressable style={styles.buttonGoogle}
-      
-        onPress={() => {
-            console.log("Attempt  Register-Navigation");
-            router.push("/register");
-          }
-        }>
-        <Link href="/register"
-            style={styles.buttonGoogleText}>Continue with Google</Link>
-      </Pressable>
-      
     </View>
   );
 }
@@ -74,24 +90,79 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#F5F5F5',
+    padding: 16,
+    // backgroundColor: '#F5F5F5',
+    backgroundColor: "black",
+  },
+  header: {
+    display: "flex",
+    marginBottom: 32,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logo: {
+    fontSize: 86,
+    fontWeight: "bold",
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 40,
-    color: '#333',
+    fontSize: 28,
+    fontWeight: "bold",
+    color:"lightgrey",
+    // color:"black",
+
+  },  
+  // title: {
+  //   fontSize: 32,
+  //   fontWeight: 'bold',
+  //   marginBottom: 40,
+  //   color: '#333',
+  // },
+  h_btnContainer:{ 
+    flexDirection:"row", 
+    width:"100%",    
+    justifyContent: "space-around",
+    gap:16
+  },
+  buttonGuest:{
+    width:"64%",
+    height: 50,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'grey', 
+    elevation: 3,
+  },
+  buttonGuestText:
+  {
+    fontSize: 18,
+    color: "white",
+    fontWeight: "bold",
+  },
+  buttonGoogle:{
+    width: 50,
+    height: 50,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FF004D',
+    marginBottom: 16,
+    elevation: 3,
+  },
+  buttonGoogleText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
   },
   input: {
-    width: '100%',
+    width: '92%',
     height: 50,
     paddingHorizontal: 10,
     marginBottom: 20,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     fontSize: 16,
-    color: '#333',
-    borderWidth: 1,
+    color: '#ccc',
+    fontWeight:"semibold",
+    borderBottomWidth: 2,
     borderColor: '#ccc',
     // shadowColor: '#000',
     // shadowOffset: { width: 0, height: 1 },
@@ -100,30 +171,17 @@ const styles = StyleSheet.create({
     // elevation: 1,
   },
   button: {
-    width: '100%',
+    width: '90%',
     height: 50,
+    borderRadius: 4,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'wheat',
-    marginBottom: 20,
+    backgroundColor: '#007bff',
+    marginBottom: 16,
     elevation: 3,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  buttonGoogle:{
-    width: '100%',
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'red',
-    marginBottom: 20,
-    elevation: 3,
-  },
-  buttonGoogleText: {
-    color: 'white',
     fontSize: 18,
     fontWeight: '600',
   },
@@ -132,10 +190,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   infoText: {
-    color: '#333',
+    color: 'lightgrey',
   },
   linkText: {
-    color: 'lightblue',
+    color: '#FF004D',
     fontWeight: 'bold',
   },
 });

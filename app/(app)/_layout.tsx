@@ -3,8 +3,9 @@ import { Drawer } from "expo-router/drawer";
 import { Redirect, Stack, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import RecordingProvider from "@/context/RecordingsContext";
-import { useSession } from "@/context/Authcontext";
+// import { useSession } from "@/context/AuthContext";
 import { Text } from "react-native";
+import { useSession } from "@/context/AuthContext";
 
 export default function Layout() { 
 

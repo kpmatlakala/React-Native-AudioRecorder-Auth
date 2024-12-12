@@ -1,4 +1,4 @@
-import { useSession } from '@/context/Authcontext';
+import { useSession } from '@/context/AuthContext';
 import { Link, router, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
@@ -27,6 +27,18 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+
+    <Text>OR</Text>
+      <Pressable style={styles.buttonGoogle}
+      
+        onPress={() => {
+            console.log("Attempt  Register-Navigation");
+            router.push("/register");
+          }
+        }>
+        <Link href="/register"
+            style={styles.buttonGoogleText}>Continue with Google</Link>
+      </Pressable>
       {/* <Text style={styles.title}>Login</Text> */}
       <TextInput
         style={styles.input}
@@ -53,18 +65,7 @@ export default function LoginScreen() {
           <Link href={{ pathname:"/register", params: {from: "login", redirectTo: "home"}}}
             style={styles.linkText}>Register here</Link>
         </Pressable>
-      </View>
-      <Text>OR</Text>
-      <Pressable style={styles.buttonGoogle}
-      
-        onPress={() => {
-            console.log("Attempt  Register-Navigation");
-            router.push("/register");
-          }
-        }>
-        <Link href="/register"
-            style={styles.buttonGoogleText}>Continue with Google</Link>
-      </Pressable>
+      </View>     
       
     </View>
   );

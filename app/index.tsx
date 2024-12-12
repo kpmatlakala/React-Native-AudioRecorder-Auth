@@ -1,174 +1,142 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Pressable } from "react-native";
 import { Link, useRouter } from "expo-router";
-// import { AuthContext } from "@/context/AuthContext";
-import { RecordingsContext } from "@/context/RecordingsContext";
-import Icons from "@/components/Icons";
 
-export default function Home() {
-  const { user } = useContext(AuthContext);
-  const { recordings } = useContext(RecordingsContext);
+import Icons from "@/utils/Icons";
+
+export default function LandingPage() {  
   const router = useRouter();
 
+  const handleGuestAccess = () => {
+    // Navigate as guest (e.g., to the recording page or home page with limited access)
+    router.push("/(app)/recordings/index"); // Assuming you want to show limited features as a guest
+  }
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>🎙️ Audio Recording App</Text>
-        {user ? (
-          <Text style={styles.welcome}>Welcome, {user.username}!</Text>
-        ) : (
-          <Text style={styles.prompt}>
-            <Link href="/(auth)/login" style={styles.link}>Login</Link> or{" "}
-            <Link href="/(auth)/register" style={styles.link}>Register</Link> to access all features.
-          </Text>
-        )}
+        {/* <Text style={styles.logo}>🎙️</Text> */}
+        <Text style={styles.logo}>
+          <Icons name="microphone" size={86} color="#FF004D" />
+        </Text>
+        <Text style={styles.title}>Audio Recorder</Text> 
+      </View> 
+
+      <View style={{ padding:32,alignItems: "center", gap: 8 }}>
+        <View style={{flexDirection:"row", alignItems:"center",  gap: 4,}}>
+          <Pressable style={styles.loginGoogle}
+            onPress={() => alert("Sign-in with Google is current unavailable")}>
+            <Text style={styles.loginGoogleText}>
+              <Icons name="google" size={26} color="black"/>         
+            </Text>         
+          </Pressable> 
+          
+          <Pressable style={styles.loginButton}
+            onPress={() => router.push("/(auth)/login")}>
+            <Text style={styles.loginButtonText}>
+              Login         
+            </Text> 
+            <Text>to access all features.</Text>
+          </Pressable> 
+        </View>     
+
+        <Text> or  </Text>
+
+        <Pressable style={styles.guestButton}
+          onPress={handleGuestAccess}>
+          <Text style={styles.guestButtonText}>
+            Continue as Guest
+          </Text>   
+        </Pressable>
       </View>
-
-      {/* Action Buttons */}
-      <View style={styles.actionContainer}>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => router.push("/(app)/recordings/record")}
-        >
-          <Icons name="microphone" size={40} color="white" />
-          <Text style={styles.actionText}>Record</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => router.push("/(app)/recordings/index")}
-        >
-          <Icons name="music" size={40} color="white" />
-          <Text style={styles.actionText}>My Recordings</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Recent Recordings */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Recent Recordings</Text>
-        {recordings.length > 0 ? (
-          recordings.slice(0, 3).map((rec) => (
-            <TouchableOpacity
-              key={rec.id}
-              onPress={() => router.push(`/playback/${rec.id}`)}
-              style={styles.recordingItem}
-            >
-              <View>
-                <Text style={styles.recordingName}>{rec.name}</Text>
-                <Text style={styles.recordingTime}>
-                  Recorded @{" "}
-                  {new Date(rec.id).toLocaleTimeString("en-GB", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </Text>
-              </View>
-              <Text style={styles.recordingDuration}>{rec.duration}</Text>
-            </TouchableOpacity>
-          ))
-        ) : (
-          <Text style={styles.noRecordings}>No recordings yet!</Text>
-        )}
-      </View>
-
-      {/* Navigation Links */}
-      {user && (
-        <View style={styles.navLinks}>
-          <Link href="/(app)/profile" style={styles.link}>
-            View Profile
-          </Link>
-          <Link href="/(app)/settings" style={styles.link}>
-            App Settings
-          </Link>
-        </View>
-      )}
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: "#f9f9f9",
+    flex: 1,
     flexGrow: 1,
+    padding: 16,
+    // backgroundColor: "#f9f9f9",
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
   },
   header: {
-    marginBottom: 20,
+    display: "flex",
+    marginBottom: -8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logo: {
+    fontSize: 86,
+    fontWeight: "bold",
   },
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 5,
-  },
-  welcome: {
-    fontSize: 18,
-    color: "#666",
-  },
-  prompt: {
-    fontSize: 16,
-    color: "#555",
-  },
-  link: {
-    color: "#007bff",
-    textDecorationLine: "underline",
-  },
-  actionContainer: {
+    color:"lightgrey",
+    // color:"black",
+
+  },  
+  // Button Styles
+  buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 20,
+    width: "80%", // Controls button width
   },
-  actionButton: {
-    backgroundColor: "#4CAF50",
-    padding: 20,
-    borderRadius: 10,
+
+  loginGoogle:{
+    backgroundColor: "#007bff",
+    padding:10, 
+    borderRadius: 4,
+    // borderRadius: 48,
     alignItems: "center",
     justifyContent: "center",
-    width: "48%",
+    height: 45,
+    width: 45,
   },
-  actionText: {
+  loginGoogleText:{
+    
+  },
+  // Login Button Style
+  loginButton: {
+    
+    backgroundColor: "#FF004D",
+    paddingVertical: 1,
+    paddingHorizontal: 40,
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "90%", // Full width of container
+   
+  },
+  loginButtonText: {
+    fontSize: 18,
     color: "white",
-    fontSize: 16,
-    marginTop: 8,
-  },
-  section: {
-    marginTop: 30,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  recordingItem: {
-    backgroundColor: "white",
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  recordingName: {
-    fontSize: 16,
     fontWeight: "bold",
   },
-  recordingTime: {
-    fontSize: 14,
-    color: "#666",
+  
+  // Guest Button Style
+  guestButton: {
+    backgroundColor: "grey", 
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "86%", // Full width of container
   },
-  recordingDuration: {
-    fontSize: 14,
-    color: "#333",
+  guestButtonText: {
+    fontSize: 18,
+    color: "white",
     fontWeight: "bold",
   },
-  noRecordings: {
-    fontSize: 16,
-    color: "#888",
-    textAlign: "center",
-    marginTop: 10,
-  },
-  navLinks: {
-    marginTop: 30,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+
+  // Optional Button Hover Effect (for web-like apps, but not applicable in React Native)
+  buttonHover: {
+    backgroundColor: "#0056b3", // Darker blue for hover effect
   },
 });
