@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "React-Native-Lesson-2-AudioRecording-App",
-    "slug": "React-Native-Lesson-2-AudioRecording-App",
+    "name": "frontend",
+    "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
