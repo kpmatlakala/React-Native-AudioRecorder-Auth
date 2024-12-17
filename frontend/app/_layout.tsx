@@ -1,5 +1,10 @@
-import { Stack } from "expo-router";
+import { SessionProvider } from "@/context/AuthContext";
+import { Slot } from "expo-router";
 
 export default function RootLayout() {
-  return <Stack />;
+  return (
+    <SessionProvider>
+      <Slot />;
+    </SessionProvider>
+  )
 }
