@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
-import { Redirect, Slot, Stack, usePathname } from 'expo-router'
-import { Drawer } from 'expo-router/drawer';
+import { Redirect, Stack, usePathname } from 'expo-router'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useSession } from '@/context/AuthContext';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import RecordingProvider from '@/context/RecordingContext';
 
 const App_Layout = () => {
 
@@ -32,55 +32,42 @@ const App_Layout = () => {
     }
 
     return (
-        <GestureHandlerRootView style={{flex:1}} >
-            <Drawer>
-                <Drawer.Screen
-                    name="index"
-                    options={{
-                        drawerLabel: "🎙️ Audio Recorder",
-                        title: "Audio Recorder",
-                    }}
-                />
-                
-                <Drawer.Screen
-                    name="profile"
-                    options={{
-                        drawerLabel: "👤 Profile",
-                        title: "Playback",
-                    }}
-                />
 
-                <Drawer.Screen
-                    name="settings"
-                    options={{
-                        drawerLabel: "⚙ Settings",
-                        title: "Playback",
-                    }}
-                />
-            </Drawer>
-           {/* <Drawer>
-                
+        <RecordingProvider>
+            <GestureHandlerRootView style={{ flex:1 }} >
+                {/* <Drawer>
+                    <Drawer.Screen
+                        name="index"
+                        options={{
+                            drawerLabel: "🎙️ Audio Recorder",
+                            title: "Audio Recorder",
+                        }}
+                    />
+                    
+                    <Drawer.Screen
+                        name="profile"
+                        options={{
+                            drawerLabel: "👤 Profile",
+                            title: "Playback",
+                        }}
+                    />
 
-                <Drawer.Screen
-                name="recordings/index"
-                options={{
-                    drawerLabel: "📼 Recordings",
-                    title: "Recordings",
-                }}
-                />
-
-                <Drawer.Screen
-                name="playback/index"
-                options={{
-                    drawerLabel: "🎧 Playback",
-                    title: "Playback",
-                }}
-                />
-
-                
-
-          </Drawer> */}
-        </GestureHandlerRootView>
+                    <Drawer.Screen
+                        name="settings"
+                        options={{
+                            drawerLabel: "⚙ Settings",
+                            title: "Playback",
+                        }}
+                    />
+                </Drawer> */}
+                <Stack>        
+                    <Stack.Screen name="(recorder)" 
+                    options={{ headerShown: false,  title: "🎙️ Recorder " }}  /> 
+                    <Stack.Screen name="playback/[id]" 
+                    options={{ headerShown: true, title:`🎧`}}  />
+                </Stack>
+            </GestureHandlerRootView>
+        </RecordingProvider>
         // 
     )
 }
