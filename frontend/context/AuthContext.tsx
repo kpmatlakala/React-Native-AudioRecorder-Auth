@@ -2,10 +2,11 @@
 import React, { createContext, useContext, useState, PropsWithChildren } from 'react';
 
 import { auth } from '@/firebase/config';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 // Define the auth context type
 type AuthContextType = {
+    SignUp: (email: string, password: string) => Promise<void>;
     SignIn: (email?: string, password?: string) => Promise<void>;
     SignOut: () => Promise<void>;
     session: string | null;
@@ -28,6 +29,23 @@ export function SessionProvider({ children }: PropsWithChildren)
 {
     const [session, setSession] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    // SignUp function
+    const SignUp = async (email: string, password: string) => {
+        setIsLoading(true);
+        try 
+        {
+        // Create a new user with email and password
+        await createUserWithEmailAndPassword(auth, email, password);
+        setSession('logged-in');
+        }
+        catch (error) 
+        {
+        console.error('Sign up failed:', error.message);
+        alert(error.message);
+        } 
+        finally { setIsLoading(false); }
+    };
 
     const SignIn = async (email?: string, password?: string) => {
         setIsLoading(true);
@@ -57,7 +75,7 @@ export function SessionProvider({ children }: PropsWithChildren)
     };
 
     return (
-        <AuthContext.Provider value={{ SignIn, SignOut, session, isLoading }}>
+        <AuthContext.Provider value={{ SignUp, SignIn, SignOut, session, isLoading }}>
             {children}
         </AuthContext.Provider>
     );

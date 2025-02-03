@@ -5,7 +5,7 @@ export const RecordingsContext = createContext({
   recordings: [],
   setRecordings: (updatedRecordings: any) => {},
   currentRecording: "",
-  setCurrentRecording: (p0: unknown) => {},
+  setCurrentRecording: (currentRecording: any) => {},
 });
 
 export default function RecordingProvider({ children })
@@ -22,10 +22,7 @@ export default function RecordingProvider({ children })
               setRecordings(JSON.parse(storedRecordings));
             }
           } 
-          catch (error) 
-          {
-            console.error("Error fetching recordings:", error);
-          }
+          catch (error) { console.error("Error fetching recordings:", error); }
         };
     
         fetchRecordings();

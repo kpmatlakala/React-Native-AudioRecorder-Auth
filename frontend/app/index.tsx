@@ -12,20 +12,36 @@ export default function LandingPage() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.logo}>🎙️</Text>
-        <Text style={styles.title}>Audio Recorder</Text>
+        <Text style={styles.logotitle}>Audio Recorder</Text>
       </View>
 
-      <Pressable
-        style={styles.button}
-        onPress={() => SignIn().then(() => router.push('/(app)'))}>
-        <Text style={styles.buttonText}>Continue as Guest</Text>
-      </Pressable>
+      <Text style={styles.title}>Welcome Back! </Text>
+      <Text style={styles.subtitle}>
+        Sign in to your account and start recording your next masterpiece. We’re excited to hear what you create!
+      </Text>
 
-      <Pressable
-        style={styles.button}
-        onPress={() => router.push('/(auth)/login')}>
-        <Text style={styles.buttonText}>Login</Text>
-      </Pressable>
+      <View style={styles.content}>
+        <Pressable
+          style={styles.button}
+          onPress={() => SignIn().then(() => router.push('/(app)'))}>
+          <Text style={styles.buttonText}>Continue as Guest</Text>
+        </Pressable>
+
+        <Pressable
+          style={styles.loginbutton}
+          onPress={() => router.push('/(auth)/login')}>
+          <Text style={styles.buttonText}>Login</Text>
+        </Pressable>
+      </View>
+
+      
+
+      <Text style={{color: "white"}}>Don't have an account?
+        <Text onPress={() => router.push("/(auth)/register")}>
+          <Text style={styles.signup}> Signup </Text>
+        </Text>  
+      </Text>
+
     </View>
   );
 }
@@ -44,18 +60,49 @@ const styles = StyleSheet.create({
   logo: {
     fontSize: 86,
   },
-  title: {
-    fontSize: 28,
+  logotitle: {
+    fontSize: 32,
     color: 'lightgrey',
   },
+  content:{
+    flexDirection:"row",
+    justifyContent: 'space-around',
+  },
+  title: {
+    fontSize: 21,
+    color: 'lightgrey',
+  },
+  subtitle: {
+    fontSize: 12,
+    color: 'lightgrey',
+    width:"100%",
+    paddingHorizontal: 64,
+    marginBottom: 16,
+    textAlign:"center"
+  },
   button: {
-    marginTop: 16,
+    marginHorizontal: 8,
+    marginBottom: 32,
+    backgroundColor: '#3a86ff',
+    padding: 8,
+    borderRadius: 4,
+  },
+  loginbutton: {
+    marginHorizontal: 8,
+    marginBottom: 32,
     backgroundColor: '#FF004D',
-    padding: 16,
+    padding: 8,
     borderRadius: 4,
   },
   buttonText: {
     color: 'white',
+    fontWeight: 600,
     fontSize: 18,
   },
+  signup: {
+    fontSize: 16,
+    color: '#3a86ff',
+    fontWeight: 600,
+
+  }
 });

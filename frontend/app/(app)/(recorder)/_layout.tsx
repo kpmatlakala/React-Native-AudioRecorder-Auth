@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { FlatList, View, StyleSheet, Text, TextInput } from "react-native";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, Pressable } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
 import { Picker } from "@react-native-picker/picker";
 
@@ -128,7 +128,14 @@ const AllRecordingsPreview = () => {
          <Drawer
           drawerContent={() => (
             <>            
-              <Link href="/" style={styles.backLink}> <Text>↩ Audio Recorder</Text> </Link>  
+              <View style={{flexDirection:"row",justifyContent:"space-between", alignItems:"center" }}> 
+                <Text style={styles.backLink} onPress={()=> router.push("/")}>↩ Audio Recorder</Text>
+                <View style={{width:64, height:64, backgroundColor:"gray", borderRadius: 50, margin:8}}>
+                  <Pressable style={{flex:1}} onPress={()=> router.push("/(app)/profile")}>
+                    <Text style={{flex:1, textAlign:"center", fontSize:45, fontWeight:600}}>G</Text>
+                  </Pressable>                  
+                </View> 
+              </View>  
   
               <AllRecordingsPreview /> 
   
