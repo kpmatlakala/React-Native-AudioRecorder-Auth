@@ -1,77 +1,84 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
-import { Redirect, Stack, usePathname } from 'expo-router'
+import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Redirect, Stack, usePathname } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
 import { useSession } from '@/context/AuthContext';
 import RecordingProvider from '@/context/RecordingContext';
+import * as FileSystem from 'expo-file-system';
+import { checkFileExistence, checkForOrphanedFiles, loadRecordings, logRecordingsWithFileStatus, saveRecording, saveRecordingsToStorage } from "@/utils/loadRecordings"; // Ensure saveRecordingsToStorage is available
 
 const App_Layout = () => {
+  const { session, isLoading } = useSession();
+  const [recordings, setRecordings] = useState([]);
 
-    const { session, isLoading } = useSession();
-    useEffect(() => {
-        console.log("app/(app) | session: ", session)
-      }, [session]);
+  useEffect(() => {
+    console.log("app/(app) | session: ", session);
+  }, [session]);
 
-    const _pathname = usePathname();
-    const authRoutes = ["/login", "/register"]  
+  const _pathname = usePathname();
+  const authRoutes = ["/login", "/register"];
 
-    if(!session && !authRoutes.includes(_pathname))
-    {
-        return <Redirect href={{ pathname: "/login", }} />
-    }  
-    
-    if(session && authRoutes.includes(_pathname))
-    {
-        return <Redirect href={{ pathname: "/"}} />
+  if (!session && !authRoutes.includes(_pathname)) {
+    return <Redirect href={{ pathname: "/login" }} />;
+  }
+
+  if (session && authRoutes.includes(_pathname)) {
+    return <Redirect href={{ pathname: "/" }} />;
+  }
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }  
+
+  useEffect(() => {
+    const loadAndCheckForOrphans = async () => {
+      try 
+      {
+        const storedRecordings = await loadRecordings();
+        const updatedRecordings = await checkForOrphanedFiles(storedRecordings);
+        setRecordings(updatedRecordings);
+      } 
+      catch (error) { console.error('Error loading and checking for orphaned files:', error); }
+    };
+
+    loadAndCheckForOrphans();
+  }, []); // Empty dependency array means this runs once on mount
+
+  // Function to handle adding a new recording
+  const handleAddRecording = async (newRecording) => {
+    try {
+      await saveRecording(newRecording);
+      const updatedRecordings = await loadRecordings();
+      const finalRecordings = await checkForOrphanedFiles(updatedRecordings);
+      setRecordings(finalRecordings);
+    } catch (error) {
+      console.error('Error adding recording:', error);
     }
+  }; 
 
-    if(isLoading)
-    {
-        return <Text>Loading...</Text>;
-    }
+  useEffect(() => {
+    logRecordingsWithFileStatus();
+    checkForOrphanedFiles(); // Call this on app launch to check for orphaned files
+  }, []);
 
-    return (
+  return (
+    <RecordingProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Stack>
+          <Stack.Screen 
+            name="(recorder)" 
+            options={{ headerShown: false, title: "🎙️ Recorder" }} 
+          />
+          <Stack.Screen 
+            name="playback/[id]" 
+            options={{ headerShown: true, title: "🎧" }} 
+          />
+        </Stack>
+      </GestureHandlerRootView>
+    </RecordingProvider>
+  );
+};
 
-        <RecordingProvider>
-            <GestureHandlerRootView style={{ flex:1 }} >
-                {/* <Drawer>
-                    <Drawer.Screen
-                        name="index"
-                        options={{
-                            drawerLabel: "🎙️ Audio Recorder",
-                            title: "Audio Recorder",
-                        }}
-                    />
-                    
-                    <Drawer.Screen
-                        name="profile"
-                        options={{
-                            drawerLabel: "👤 Profile",
-                            title: "Playback",
-                        }}
-                    />
+export default App_Layout;
 
-                    <Drawer.Screen
-                        name="settings"
-                        options={{
-                            drawerLabel: "⚙ Settings",
-                            title: "Playback",
-                        }}
-                    />
-                </Drawer> */}
-                <Stack>        
-                    <Stack.Screen name="(recorder)" 
-                    options={{ headerShown: false,  title: "🎙️ Recorder " }}  /> 
-                    <Stack.Screen name="playback/[id]" 
-                    options={{ headerShown: true, title:`🎧`}}  />
-                </Stack>
-            </GestureHandlerRootView>
-        </RecordingProvider>
-        // 
-    )
-}
-
-export default App_Layout
-
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

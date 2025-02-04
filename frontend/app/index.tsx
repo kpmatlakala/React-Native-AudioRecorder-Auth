@@ -23,7 +23,7 @@ export default function LandingPage() {
       <View style={styles.content}>
         <Pressable
           style={styles.button}
-          onPress={() => SignIn().then(() => router.push('/(app)'))}>
+          onPress={() => SignIn().then(() => router.push("/(app)/(recorder)"))}>
           <Text style={styles.buttonText}>Continue as Guest</Text>
         </Pressable>
 
@@ -32,13 +32,11 @@ export default function LandingPage() {
           onPress={() => router.push('/(auth)/login')}>
           <Text style={styles.buttonText}>Login</Text>
         </Pressable>
-      </View>
-
-      
+      </View>      
 
       <Text style={{color: "white"}}>Don't have an account?
-        <Text onPress={() => router.push("/(auth)/register")}>
-          <Text style={styles.signup}> Signup </Text>
+        <Text style={styles.signup} onPress={() => router.push("/(auth)/register")}>
+          Signup
         </Text>  
       </Text>
 

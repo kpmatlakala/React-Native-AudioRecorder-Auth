@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable, FlatList } from "react-native";
 import { Link, useNavigation } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage"; 
 import { Audio } from "expo-av";
+import * as FileSystem from 'expo-file-system';
 
 import { RecordingsContext } from "@/context/RecordingContext";
 import Icons from "@/utils/Icons";
@@ -108,16 +109,20 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
       if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
   
       await audioRecording.stopAndUnloadAsync();
+
+      const uri = audioRecording.getURI();
+      console.log('Recording URI after stop:', uri); // Check if the URI is valid
+
       const { sound, status } = await audioRecording.createNewLoadedSoundAsync();
       const formattedDuration = formatTime(Math.floor(status.durationMillis / 1000));
   
       setIsRecording(false);
       setCurrentRecording({
         id: Date.now(),
-        name: `Recording-${new Date(Date.now()).toLocaleString('en-GB', { hour12: false }).replace(/[^\d]/g, '').slice(0, 12)}`,
+        name: `Recording-${new Date().toISOString().split('.')[0]}`,
         duration: formattedDuration,
         sound,
-        uri: audioRecording.getURI(),
+        uri,
       });
       setAudioRecording(null);
   
@@ -143,45 +148,54 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
   const saveRecording = async () => {
     if (!currentRecording) return;
   
-    try 
-    {
-      let recordingUri = currentRecording.uri;
-  
-      // Handle blob URL (for web) - converting it into a proper file URL if necessary
+    try {
+      let recordingUri = currentRecording.uri;  
+     
       if (recordingUri.startsWith('blob:')) 
       {
         const response = await fetch(recordingUri);
         const blob = await response.blob();
         const objectURL = URL.createObjectURL(blob);
-        recordingUri = objectURL; // Update URI with object URL for web
+        recordingUri = objectURL;
       }
   
-      // For all platforms, we save the recordings in AsyncStorage
+      
+      const directory = FileSystem.documentDirectory; // or FileSystem.documentDirectory + 'Recordings/'
+      const fileName = `Recording-${new Date().toISOString().split('.')[0]}.m4a`;  
+      const fileUri = directory + fileName;
+  
+      await FileSystem.copyAsync({
+        from: recordingUri,
+        to: fileUri,
+      });
+  
+      // Save the file's URI to AsyncStorage for future access
       const newRecording = {
         ...currentRecording,
-        uri: recordingUri,
+        uri: fileUri, // Save the new file URI
       };
   
       // Retrieve the existing list of recordings from AsyncStorage
-      const storedRecordings = await AsyncStorage.getItem("recordings");
+      const storedRecordings = await AsyncStorage.getItem('recordings');
       const recordingsList = storedRecordings ? JSON.parse(storedRecordings) : [];
   
       // Add the new recording to the list
       const updatedRecordingsList = [...recordingsList, newRecording];
   
       // Save the updated list back to AsyncStorage
-      await AsyncStorage.setItem("recordings", JSON.stringify(updatedRecordingsList));
+      await AsyncStorage.setItem('recordings', JSON.stringify(updatedRecordingsList));
   
-      // Update the context/state
+      // Update the state/context
       setRecordings(updatedRecordingsList);
       setCurrentRecording(null); // Clear the current recording after saving
-      stopPlayback();
-    } 
-    catch (error) 
-    {
-      console.error("Error saving recording:", error);
+      stopPlayback(); // Stop any playback that might be happening
+  
+      console.log('Recording saved to:', fileUri); // Debugging log
+  
+    } catch (error) {
+      console.error('Error saving recording:', error);
     }
-  };   
+  }; 
 
   const discardRecording = () => {
     setCurrentRecording(null); // Discard the current recording
@@ -196,6 +210,13 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
     {
       playbackRef.current = currentRecording.sound;
       const status = await playbackRef.current.getStatusAsync();
+
+      if (status.isPlaying) 
+      {
+        console.log('Recording is already playing');
+        return;
+      }
+
       setTotalPlaybackTime(Math.floor(status.durationMillis / 1000));
       setPlaybackTime(0);
       setIsPlaying(true);
@@ -246,9 +267,7 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
       ) : currentRecording ? (
         <View style={styles.recorder}>
           <Text style={styles.title}>Recorded Audio</Text>
-          <Text>{currentRecording.name}</Text>
-          {/* {!isPlaying && } */}
-
+          <Text>{currentRecording.name}</Text>    
           {
             isPlaying ? (
               <View>
@@ -261,11 +280,11 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
               </View>
             ) : (
               <>
-              <Text>Duration: {currentRecording.duration}</Text>
-              <Pressable style={styles.playIcnBtn} onPress={playRecording} >
-                <Icons name="play" size={48}/>
-                {/* <Text>▶️</Text> */}
-              </Pressable>
+                <Text>Duration: {currentRecording.duration}</Text>
+                <Pressable style={styles.playIcnBtn} onPress={playRecording} >
+                  <Icons name="play" size={48}/>
+                  {/* <Text>▶️</Text> */}
+                </Pressable>
               </>
             )
           }
@@ -273,12 +292,12 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
           <View style={{ display:"flex", flexDirection:"row", gap: 16 }}>
             <Pressable style={styles.deleteBtn}
               onPress={discardRecording}>
-              <Text>Discard</Text>
+              <Text>❌</Text>
             </Pressable> 
               
             <Pressable style={styles.saveBtn}
               onPress={saveRecording} >
-              <Text>Save</Text>
+              <Text>💾</Text>
             </Pressable>
           </View>
         </View>

@@ -6,6 +6,7 @@ import { GestureHandlerRootView, Pressable } from "react-native-gesture-handler"
 import { Drawer } from "expo-router/drawer";
 import { Picker } from "@react-native-picker/picker";
 
+import { useSession } from '@/context/AuthContext';
 import { RecordingsContext } from "@/context/RecordingContext";
 // import Settings from "@/app/settings";
 
@@ -13,8 +14,7 @@ import { RecordingsContext } from "@/context/RecordingContext";
 const AllRecordingsPreview = () => {
     const { recordings } = useContext(RecordingsContext);
     const [selectedFilter, setSelectedFilter] = useState("all");
-    const [searchQuery, setSearchQuery] = useState("");
-  
+    const [searchQuery, setSearchQuery] = useState("");  
   
     // Get today's date boundaries
     const now = new Date();
@@ -51,6 +51,8 @@ const AllRecordingsPreview = () => {
   
         return matchesSearchQuery && matchesFilter;
       });
+
+    // console.log("Recordings", recordings);      
   
     return (
       <View style={styles.previewContainer}>
@@ -123,16 +125,21 @@ const AllRecordingsPreview = () => {
   // Main Drawer Layout
   export default function DrawerLayout() 
   {
+    const {session, SignOut } = useSession();
     return (
       <GestureHandlerRootView style={{ flex: 1 }}>
          <Drawer
           drawerContent={() => (
             <>            
               <View style={{flexDirection:"row",justifyContent:"space-between", alignItems:"center" }}> 
-                <Text style={styles.backLink} onPress={()=> router.push("/")}>↩ Audio Recorder</Text>
+                <Text style={styles.backLink} onPress={()=> router.push("/")}> ↩ </Text>
+                <Text style={{fontSize: 12}}>{ session?.email ? session.email : 'Audio Recorder'}</Text>
+
                 <View style={{width:64, height:64, backgroundColor:"gray", borderRadius: 50, margin:8}}>
                   <Pressable style={{flex:1}} onPress={()=> router.push("/(app)/profile")}>
-                    <Text style={{flex:1, textAlign:"center", fontSize:45, fontWeight:600}}>G</Text>
+                    <Text style={{flex:1, textAlign:"center", fontSize:45, fontWeight:600, color:"white"}}>
+                      { session?.email ? session.email.charAt(0).toUpperCase() : '🎶'}
+                    </Text>
                   </Pressable>                  
                 </View> 
               </View>  
@@ -140,7 +147,7 @@ const AllRecordingsPreview = () => {
               <AllRecordingsPreview /> 
   
               <View style={{flexDirection:"row", justifyContent:"space-between"}}>
-                <Link href="/(app)/settings" style={styles.backLink} > <Text>⚙️ Settings</Text></Link>   
+                <Link href="/(app)/settings" style={styles.backLink} > <Text>⚙️ Settings </Text></Link>   
               </View>          
             </>
           )}

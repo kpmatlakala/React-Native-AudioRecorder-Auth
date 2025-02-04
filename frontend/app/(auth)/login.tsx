@@ -5,10 +5,11 @@ import { useRouter } from 'expo-router';
 import { useSession } from '@/context/AuthContext';
 
 export default function LoginScreen() {
+  const router = useRouter();
   const { SignIn } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
+ 
 
   const handleLogin = () => {
     if (!email || !password) 
@@ -25,11 +26,10 @@ export default function LoginScreen() {
 
       <View style={{position:"absolute", top:0, height: 26, flexDirection: "row",justifyContent:"space-between", width:"100%", padding: 36}}>
         <Pressable onPress={()=> router.push("/")}>
-        <Text style={{color:"whitesmoke"}}>↩</Text>
+          <Text style={{color:"whitesmoke"}}>↩</Text>
         </Pressable>
         <Text style={{ color:"#3a86ff", fontWeight:600 }}>Skip</Text>
-      </View>
-      
+      </View>      
 
       <View style={styles.header}>
         <Text style={styles.logo}>🎙️</Text>
@@ -60,8 +60,8 @@ export default function LoginScreen() {
       </Pressable>
 
       <Text style={{color: "white"}}>Don't have an account?
-        <Text onPress={() => router.push("/(auth)/register")}>
-          <Text style={styles.signup}> Signup </Text>
+        <Text  onPress={() => router.push("/(auth)/register")}>
+          Signup
         </Text>  
       </Text>
 

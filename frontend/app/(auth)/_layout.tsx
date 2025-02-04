@@ -12,4 +12,3 @@ const Auth_layout = () => {
 }
 
 export default Auth_layout;
- {/*  */}
