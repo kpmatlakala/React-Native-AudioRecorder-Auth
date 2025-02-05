@@ -1,7 +1,7 @@
 // LoginScreen.tsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { useSession } from '@/context/AuthContext';
 
 export default function LoginScreen() {
@@ -60,9 +60,7 @@ export default function LoginScreen() {
       </Pressable>
 
       <Text style={{color: "white"}}>Don't have an account?
-        <Text  onPress={() => router.push("/(auth)/register")}>
-          Signup
-        </Text>  
+        <Link href={"/(auth)/register"}>  Signup </Link>  
       </Text>
 
     </View>

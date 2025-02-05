@@ -105,7 +105,8 @@ const AudioPlaybackScreen = () => {
 
         setIsButtonPressing(true);
 
-        try {
+        try 
+        {
             const confirmed = await new Promise((resolve) => {
                 Alert.alert(
                     'Delete Recording',
@@ -121,7 +122,7 @@ const AudioPlaybackScreen = () => {
             {
                 // 1. Delete the recording file from the filesystem
                 const fileUri = recording.uri;
-                // await FileSystem.deleteAsync(fileUri, { idempotent: true });
+                await FileSystem.deleteAsync(fileUri, { idempotent: true });
 
                 // 2. Update the context by removing the recording
                 deleteRecording(id);
@@ -130,12 +131,13 @@ const AudioPlaybackScreen = () => {
                 loadRecordings();
                 router.back(); // Go back after successful deletion               
             }
-        } catch (error) {
+        } 
+        catch (error) 
+        {
             console.error('Error deleting recording:', error);
             Alert.alert('Error', 'An unexpected error occurred while deleting the recording.');
-        } finally {
-            setIsButtonPressing(false);
-        }
+        } 
+        finally { setIsButtonPressing(false); }
     };
 
     useEffect(() => {
@@ -152,18 +154,21 @@ const AudioPlaybackScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Audio Playback</Text>
+            {/* <Text style={styles.title}>Audio Playback</Text> */}
             {recording && (
                 <>
-                    <Text>
+                    <Text style={{}}>
                         {isPlaying && 'Playing: '}
                         {recording.name}
                     </Text>
+
                     <Text>URI: {recording.uri}</Text>
+
                     <View style={styles.timeContainer}>
                         <Text>{formatTime(playbackPosition)}</Text>
                         <Text>{formatTime(playbackDuration)}</Text>
                     </View>
+
                     <View style={styles.controlsContainer}>
                         {isPlaying ? (
                             <>
@@ -195,7 +200,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems: 'center',
     },
     title: {

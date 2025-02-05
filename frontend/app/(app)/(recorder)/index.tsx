@@ -302,7 +302,7 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
           </View>
         </View>
       ) : (
-        <View style={styles.recorderMin}>
+        <View style={styles.recorder}>
           <>
             {
               todaysRecordings.length > 0 ? (
@@ -337,21 +337,49 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
 
                   keyExtractor={(item) => item.id.toString()}
                 />
+
+                <View style={styles.recorderMinInner}>
+                  <Pressable 
+                    style={styles.button}                 
+                  >
+                    <Text style={{fontSize: 32}}>👤</Text>
+                    <Text style={{fontSize: 12}}>Profile</Text>
+                    {/* <Icons name="user" size={32}/> */}
+                  </Pressable>
+
+                  <Pressable 
+                    style={styles.recBtn}
+                    onPress={startRecording}
+                  >
+                    {/* <Text>🔴</Text> */}
+                    <Icons name="microphone" size={32}/>
+                  </Pressable>
+
+                  <Pressable 
+                    style={styles.button}                    
+                  >
+                    <Text style={{fontSize: 32}}>⚙</Text>
+                    <Text style={{fontSize: 12}}>Settings</Text>
+                    {/* <Icons name="setting" size={32}/> */}
+                  </Pressable>
+                </View>
               </>
+    
+
             ) : (
-              <Text style={styles.noRecordingsText}></Text>
+              <View style={styles.recorderMin}>
+                <Pressable 
+                  style={styles.recNstopBtn}
+                  onPress={startRecording}
+                >
+                  {/* <Text>🔴</Text> */}
+                  <Icons name="microphone" size={48}/>
+                </Pressable>
+              </View>
             )}
           </>           
 
-          <View style={styles.recorderMinInner}>
-            <Pressable 
-              style={styles.recNstopBtn}
-              onPress={startRecording}
-            >
-              {/* <Text>🔴</Text> */}
-              <Icons name="microphone" size={48}/>
-            </Pressable>
-          </View>
+
 
         </View>
       )}
@@ -396,10 +424,32 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
 
+  recBtn: {
+    width: 86,
+    height: 86,   
+    backgroundColor: "#FF0044",
+    borderRadius: 128,  // Half the width/height to make it circular
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 4,  // Adding space above the button for better placement
+  },
+
+  button: {
+    width: 64,
+    height: 64,   
+    // backgroundColor: "#0077GG",
+    // borderRadius: 128,  // Half the width/height to make it circular
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 8,  // Adding space above the button for better placement
+  },
+
   recNstopBtn: {
-    width: 128,
-    height: 128,
-    backgroundColor: "#0077FF",
+    // width: 86,
+    // height: 86,
+    width: 126,
+    height: 126,
+    backgroundColor: "#FF0044",
     borderRadius: 128,  // Half the width/height to make it circular
     justifyContent: "center",
     alignItems: "center",
@@ -418,6 +468,7 @@ const styles = StyleSheet.create({
 
   recorder: {
     flex: 1,
+    width: "100%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -429,12 +480,10 @@ const styles = StyleSheet.create({
   },
 
   recorderMin: {    
-    width:"100%",
+    width:"98%",
     flex:1, 
     justifyContent: "center",  
     alignItems: "center", 
-    
-
   },
 
   recorderMinInner: {
@@ -444,7 +493,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",  // Take full width of the container
     alignItems: "center", // Align items centrally along the horizontal axis
-    elevation:8
+    elevation:8,
+    gap: "8%"
   },
 
   recordings: {

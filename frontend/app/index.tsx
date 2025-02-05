@@ -1,7 +1,7 @@
 // LandingPage.tsx
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { useSession } from '@/context/AuthContext';
 
 export default function LandingPage() {
@@ -35,9 +35,9 @@ export default function LandingPage() {
       </View>      
 
       <Text style={{color: "white"}}>Don't have an account?
-        <Text style={styles.signup} onPress={() => router.push("/(auth)/register")}>
+        <Link href="/(auth)/register" style={styles.signup}>
           Signup
-        </Text>  
+        </Link>  
       </Text>
 
     </View>
