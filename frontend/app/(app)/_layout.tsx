@@ -5,7 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSession } from '@/context/AuthContext';
 import RecordingProvider from '@/context/RecordingContext';
 import * as FileSystem from 'expo-file-system';
-import { checkFileExistence, checkForOrphanedFiles, loadRecordings, logRecordingsWithFileStatus, saveRecording, saveRecordingsToStorage } from "@/utils/loadRecordings"; // Ensure saveRecordingsToStorage is available
+import { checkFileExistence, loadRecordings, logRecordingsWithFileStatus } from "@/utils/loadRecordings"; // Ensure saveRecordingsToStorage is available
 
 const App_Layout = () => {
   const { session, isLoading } = useSession();
@@ -28,38 +28,12 @@ const App_Layout = () => {
 
   if (isLoading) {
     return <Text>Loading...</Text>;
-  }  
+  }
 
-  useEffect(() => {
-    const loadAndCheckForOrphans = async () => {
-      try 
-      {
-        const storedRecordings = await loadRecordings();
-        const updatedRecordings = await checkForOrphanedFiles(storedRecordings);
-        setRecordings(updatedRecordings);
-      } 
-      catch (error) { console.error('Error loading and checking for orphaned files:', error); }
-    };
-
-    loadAndCheckForOrphans();
-  }, []); // Empty dependency array means this runs once on mount
-
-  // Function to handle adding a new recording
-  const handleAddRecording = async (newRecording) => {
-    try {
-      await saveRecording(newRecording);
-      const updatedRecordings = await loadRecordings();
-      const finalRecordings = await checkForOrphanedFiles(updatedRecordings);
-      setRecordings(finalRecordings);
-    } catch (error) {
-      console.error('Error adding recording:', error);
-    }
-  }; 
-
-  useEffect(() => {
-    logRecordingsWithFileStatus();
-    checkForOrphanedFiles(); // Call this on app launch to check for orphaned files
-  }, []);
+//   useEffect(() => {
+//     logRecordingsWithFileStatus();
+//     checkForOrphanedFiles(); // Call this on app launch to check for orphaned files
+//   }, []);
 
   return (
     <RecordingProvider>
