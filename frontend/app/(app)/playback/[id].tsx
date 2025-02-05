@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Alert, SafeAreaView } from 'react-native';
 import { Audio } from 'expo-av';
 import { useRoute } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { RecordingsContext } from '@/context/RecordingContext';
 import * as FileSystem from 'expo-file-system';
 import { loadRecordingById, loadRecordings } from '@/utils/loadRecordings';
+import { Icon } from 'react-native-vector-icons/Icon';
+import Icons from '@/utils/Icons';
 
 const AudioPlaybackScreen = () => {
     const route = useRoute();
@@ -153,46 +155,68 @@ const AudioPlaybackScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {/* <Text style={styles.title}>Audio Playback</Text> */}
             {recording && (
                 <>
+                    
                     <Text style={{}}>
-                        {isPlaying && 'Playing: '}
-                        {recording.name}
-                    </Text>
-
-                    <Text>URI: {recording.uri}</Text>
-
-                    <View style={styles.timeContainer}>
-                        <Text>{formatTime(playbackPosition)}</Text>
-                        <Text>{formatTime(playbackDuration)}</Text>
-                    </View>
+                        {isPlaying && 'Playing: '}                            
+                    </Text>       
 
                     <View style={styles.controlsContainer}>
+                        <View style={styles.timeContainer}>
+                            <Text>{formatTime(playbackPosition)}</Text>
+                            <Text>{formatTime(playbackDuration)}</Text>
+                        </View>
+
                         {isPlaying ? (
-                            <>
-                                <Pressable onPress={handlePlayPause} style={styles.button}>
-                                    <Text style={styles.buttonText}>Pause</Text>
+                            <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+                                <Pressable onPress={handlePlayPause} style={styles.pauseBtn}>
+                                    {/* <Text style={styles.buttonText}>Pause</Text> */}
+                                     <Icons name={"pause"} color={"white"}/>
                                 </Pressable>
-                                <Pressable onPress={handleStop} style={styles.button}>
-                                    <Text style={styles.buttonText}>Stop</Text>
+                                <Pressable onPress={handleStop} style={styles.playNstopBtn}>
+                                    {/* <Text style={styles.buttonText}>Stop</Text> */}
+                                    <Icons name={"stop"} color={"white"}/>
                                 </Pressable>
-                            </>
+                                <Pressable onPress={handleStop} style={styles.repeatBtn}>
+                                    {/* <Text style={styles.buttonText}>Stop</Text> */}
+                                    <Icons name={"repeat"} color={"white"}/>
+                                </Pressable>
+                            </View>
                         ) : (
                             <>
-                                <Pressable onPress={handlePlayPause} style={styles.button}>
-                                    <Text style={styles.buttonText}>Play</Text>
+                                <Pressable onPress={handlePlayPause} style={styles.playNstopBtn}>
+                                    {/* <Text style={styles.buttonText}>Play</Text> */}
+                                    <Icons name={"play"} color={"white"}/>
                                 </Pressable>
                             </>
-                        )}
-                        <Pressable onPress={handleDeleteRecording} style={styles.button}>
-                            <Text style={styles.buttonText}>Delete</Text>
+                        )}  
+
+                        <Text style={{}}> {recording.name} </Text>                       
+                    </View>                    
+
+                    <View style={styles.footer}>  
+                        
+                        <Pressable style={styles.button} >
+                            <Icons name={"share"} color={"black"}/>
+                        </Pressable>
+
+                        <Pressable style={styles.button} >
+                            {/* <Text></Text> */}
+                            <Icons name={"info"} color={"black"}/>
+                        </Pressable>
+                        {/* <Text>URI: {recording.uri}</Text> */} 
+
+                        <Pressable style={styles.button} onPress={handleDeleteRecording} >
+                            {/* <Text style={styles.buttonText}>Delete</Text> */}
+                            <Icons name={"delete"} color={"black"}/>
                         </Pressable>
                     </View>
                 </>
             )}
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -200,8 +224,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        // justifyContent: 'center',
+        marginBottom: "8%",        
+        justifyContent: 'space-between',
         alignItems: 'center',
+        // backgroundColor:"lightgray"
     },
     title: {
         fontSize: 20,
@@ -211,24 +237,66 @@ const styles = StyleSheet.create({
     timeContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '100%',
+        width: '64%',
         marginBottom: 20,
     },
-    controlsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 20,
+    playNstopBtn: {
+        width: 128,
+        height: 128,
+        backgroundColor: "#0077FF",
+        borderRadius: 128,  // Circular button
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 20,  // Space above the button
     },
-    button: {
-        backgroundColor: '#6200ee',
-        paddingVertical: 20,
-        paddingHorizontal: 40,
-        borderRadius: 5,
+    pauseBtn: {
+        width: 86,
+        height: 86,
+        backgroundColor: "#0077FF",
+        borderRadius: 128,  // Circular button
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 20,  // Space above the button
+    },
+    repeatBtn: {
+        width: 86,
+        height: 86,
+        backgroundColor: "#0077FF",
+        borderRadius: 128,  // Circular button
+        justifyContent: "center",
+        alignItems: "center",
+        marginVertical: 20,  // Space above the button
+    },
+    controlsContainer: {       
+        justifyContent: 'center',
+        alignItems: "center",
+        gap: 20,
+        // backgroundColor:"lightgray"
+    },
+    button: 
+    {
+        width: 55,
+        height: 55,
+        alignItems:"center",
+        justifyContent:"center",
+        backgroundColor: 'lightgray',
+        paddingVertical: 4,
+        paddingHorizontal: 4,
+        borderRadius: 32,
     },
     buttonText: {
         color: 'white',
         fontWeight: 'bold',
     },
+    footer:{
+        borderTopColor: "lightgray",
+        borderTopWidth: 1,
+        width: "100%", 
+        flexDirection:'row', 
+        justifyContent: "space-between" ,
+        padding: 10,
+
+    }
 });
 
 export default AudioPlaybackScreen;

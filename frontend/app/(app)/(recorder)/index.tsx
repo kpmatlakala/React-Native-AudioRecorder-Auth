@@ -368,11 +368,14 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
 
             ) : (
               <View style={styles.recorderMin}>
+                {/* <Text onPress={startRecording}>🔴</Text> */}
+
                 <Pressable 
                   style={styles.recNstopBtn}
                   onPress={startRecording}
                 >
-                  {/* <Text>🔴</Text> */}
+                  
+                  
                   <Icons name="microphone" size={48}/>
                 </Pressable>
               </View>
@@ -404,7 +407,7 @@ const styles = StyleSheet.create({
 
   saveBtn: {
     padding: 8,
-    backgroundColor: "#4CAF50",
+    // backgroundColor: "#4CAF50",
     width: 80,
     height: 40,
     borderRadius: 4,
@@ -415,7 +418,7 @@ const styles = StyleSheet.create({
 
   deleteBtn: {
     padding: 8,
-    backgroundColor: "red",
+    // backgroundColor: "red",
     width: 80,
     height: 40,
     borderRadius: 4,
