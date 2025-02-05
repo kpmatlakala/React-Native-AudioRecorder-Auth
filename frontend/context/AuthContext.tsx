@@ -1,8 +1,11 @@
+
 import React, { createContext, useContext, useState, PropsWithChildren, useEffect } from 'react';
-import { auth } from '@/firebase/config';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
+
+import { auth, db } from '@/firebase/config';
+import { doc, setDoc, getDoc, Timestamp } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 // Define session expiration time (2 days)
 const SESSION_EXPIRATION_TIME = 2 * 24 * 60 * 60 * 1000;
@@ -63,11 +66,25 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
         restoreSession();
     }, []);
+    
+    // Cloud backup for session data
+    const backupSessionToCloud = async (email: string, isGuest: boolean, timestamp: number) => {
+        const userId = auth.currentUser?.uid;  // Firebase User ID
+        if (userId) {
+            try {
+                const userDocRef = doc(db, 'users', userId);
+                await setDoc(userDocRef, { email, isGuest, timestamp: Timestamp.fromMillis(timestamp) });
+            } catch (error) {
+                console.error('Error saving session to cloud:', error);
+            }
+        }
+    };
 
     // SignUp function
     const SignUp = async (email: string, password: string) => {
         setIsLoading(true);
-        try {
+        try 
+        {
             // Create a new user with email and password
             await createUserWithEmailAndPassword(auth, email, password);
             setSession({
@@ -75,48 +92,60 @@ export function SessionProvider({ children }: PropsWithChildren) {
                 isGuest: false,
                 timestamp: new Date().getTime(),
             });
+
             await AsyncStorage.setItem(
                 'session',
                 JSON.stringify({ email, isGuest: false, timestamp: new Date().getTime() })
             );
+
+            backupSessionToCloud(email, false, currentTime);  // Backup session to cloud
             router.replace('/(app)/(recorder)'); // Redirect to recorder page
-        } catch (error) {
+        } 
+        catch (error) 
+        {
             console.error('Sign up failed:', error.message);
             alert(error.message);
-        } finally {
-            setIsLoading(false);
-        }
+        } 
+        finally { setIsLoading(false); }
     };
 
     const SignIn = async (email?: string, password?: string) => {
         setIsLoading(true);
-        try {
-            if (email && password) {
+        try 
+        {
+            if (email && password) 
+            {
                 const currentTime = new Date().getTime();
                 await signInWithEmailAndPassword(auth, email, password);
                 await AsyncStorage.setItem(
                     'session',
                     JSON.stringify({ email, isGuest: false, timestamp: currentTime })
                 );
+
                 setSession({ email, isGuest: false, timestamp: currentTime });
+                backupSessionToCloud(email, false, currentTime);  // Backup session to cloud
                 router.replace('/(app)/(recorder)');
-            } else {
+            } 
+            else 
+            {
                 // Handle guest session
                 await AsyncStorage.setItem('guest-session', JSON.stringify({ email: 'Guest', isGuest: true, timestamp: new Date().getTime() }));
                 setSession({ email: 'Guest', isGuest: true, timestamp: new Date().getTime() });
                 router.replace('/(app)/(recorder)');
             }
-        } catch (error) {
+        } 
+        catch (error) 
+        {
             console.error('Login failed:', error.message);
             alert(error.message);
-        } finally {
-            setIsLoading(false);
-        }
+        } 
+        finally { setIsLoading(false); }
     };
 
     const SignOut = async () => {
         await signOut(auth);
         setSession(null);
+        await AsyncStorage.removeItem("session");
         router.replace('/(auth)/login');
     };
 

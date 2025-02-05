@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { View, Text, StyleSheet, Pressable, Alert, SafeAreaView } from 'react-native';
-import { Audio } from 'expo-av';
 import { useRoute } from '@react-navigation/native';
 import { router } from 'expo-router';
-import { RecordingsContext } from '@/context/RecordingContext';
+import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+
+import { RecordingsContext } from '@/context/RecordingContext';
 import { loadRecordingById, loadRecordings } from '@/utils/loadRecordings';
-import { Icon } from 'react-native-vector-icons/Icon';
 import Icons from '@/utils/Icons';
 
 const AudioPlaybackScreen = () => {
@@ -142,6 +143,18 @@ const AudioPlaybackScreen = () => {
         finally { setIsButtonPressing(false); }
     };
 
+    const shareFile = async (recordingUri) => {
+        try {
+          if (await Sharing.isAvailableAsync()) {
+            await Sharing.shareAsync(recordingUri); // sharing file URL (must be file:// or https://)
+          } else {
+            alert('Sharing is not available on this platform.');
+          }
+        } catch (error) {
+          console.error('Error sharing file: ', error.message);
+        }
+      };
+
     useEffect(() => {
         if (id) { fetchRecording(); }
         return () => { soundRef.current?.unloadAsync(); };
@@ -161,7 +174,7 @@ const AudioPlaybackScreen = () => {
                 <>
                     
                     <Text style={{}}>
-                        {isPlaying && 'Playing: '}                            
+                        {isPlaying && 'Playing'}                            
                     </Text>       
 
                     <View style={styles.controlsContainer}>
@@ -171,7 +184,12 @@ const AudioPlaybackScreen = () => {
                         </View>
 
                         {isPlaying ? (
-                            <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
+                            <View style={
+                                {width:"100%", 
+                                flexDirection:"row", 
+                                justifyContent:"space-between", 
+                                alignItems:"center",
+                                paddingHorizontal:20 }}>
                                 <Pressable onPress={handlePlayPause} style={styles.pauseBtn}>
                                     {/* <Text style={styles.buttonText}>Pause</Text> */}
                                      <Icons name={"pause"} color={"white"}/>
@@ -199,7 +217,7 @@ const AudioPlaybackScreen = () => {
 
                     <View style={styles.footer}>  
                         
-                        <Pressable style={styles.button} >
+                        <Pressable style={styles.button} onPress={() => shareFile(recording.uri)} >
                             <Icons name={"share"} color={"black"}/>
                         </Pressable>
 
@@ -250,8 +268,8 @@ const styles = StyleSheet.create({
         marginVertical: 20,  // Space above the button
     },
     pauseBtn: {
-        width: 86,
-        height: 86,
+        width: 64,
+        height: 64,
         backgroundColor: "#0077FF",
         borderRadius: 128,  // Circular button
         justifyContent: "center",
@@ -259,13 +277,13 @@ const styles = StyleSheet.create({
         marginVertical: 20,  // Space above the button
     },
     repeatBtn: {
-        width: 86,
-        height: 86,
+        width: 64,
+        height: 64,
         backgroundColor: "#0077FF",
         borderRadius: 128,  // Circular button
         justifyContent: "center",
         alignItems: "center",
-        marginVertical: 20,  // Space above the button
+        marginVertical: 20,  // Space above the button      
     },
     controlsContainer: {       
         justifyContent: 'center',
