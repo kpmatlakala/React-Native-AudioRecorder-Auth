@@ -4,8 +4,6 @@ import { Redirect, Stack, usePathname } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSession } from '@/context/AuthContext';
 import RecordingProvider from '@/context/RecordingContext';
-import * as FileSystem from 'expo-file-system';
-import { checkFileExistence, loadRecordings, logRecordingsWithFileStatus } from "@/utils/loadRecordings"; // Ensure saveRecordingsToStorage is available
 
 const App_Layout = () => {
   const { session, isLoading } = useSession();

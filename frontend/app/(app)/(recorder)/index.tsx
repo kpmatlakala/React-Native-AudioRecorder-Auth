@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useContext, useCallback } from "react";
 import { View, Text, StyleSheet, Pressable, FlatList } from "react-native";
+import Slider from '@react-native-community/slider';
 import { Link, useNavigation } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage"; 
 import { Audio } from "expo-av";
@@ -7,6 +8,7 @@ import * as FileSystem from 'expo-file-system';
 
 import { RecordingsContext } from "@/context/RecordingContext";
 import Icons from "@/utils/Icons";
+
 
 
 
@@ -251,6 +253,10 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
     }
   }, []);
 
+  const onSeek = (value) => {
+    setPlaybackTime(value);
+  };
+
   return (
     <View style={styles.container}>
       {
@@ -270,13 +276,27 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
           <Text>{currentRecording.name}</Text>    
           {
             isPlaying ? (
-              <View>
-                <Text>{formatTime(playbackTime)} / {formatTime(totalPlaybackTime)}</Text>
+              <View style={{width:"100%", justifyContent:"center", alignItems:"center"}}>
                 <Pressable style={styles.recNstopBtn}
                   onPress={stopPlayback}>
                     <Icons name="stop" size={48}/>
                     {/* <Text>⏹️</Text> */}
-                </Pressable>  
+                </Pressable> 
+
+                <Text>{formatTime(playbackTime)} / {formatTime(totalPlaybackTime)}</Text>
+
+                {/* Progress Bar */}
+                <Slider
+                  style={styles.slider}
+                  value={playbackTime}
+                  minimumValue={0}
+                  maximumValue={totalPlaybackTime}
+                  onValueChange={onSeek}
+                  minimumTrackTintColor="#7CA5B8"
+                  maximumTrackTintColor="#38369a"
+                  thumbTintColor="#2196f3"
+                  step={0}
+                />                 
               </View>
             ) : (
               <>
@@ -285,21 +305,23 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
                   <Icons name="play" size={48}/>
                   {/* <Text>▶️</Text> */}
                 </Pressable>
+                
+                <View style={{ display:"flex", flexDirection:"row", gap: 16 }}>
+                  <Pressable style={styles.deleteBtn}
+                    onPress={discardRecording}>
+                    <Text>❌</Text>
+                  </Pressable> 
+                    
+                  <Pressable style={styles.saveBtn}
+                    onPress={saveRecording} >
+                    <Text>💾</Text>
+                  </Pressable>
+                </View>
               </>
             )
           }
 
-          <View style={{ display:"flex", flexDirection:"row", gap: 16 }}>
-            <Pressable style={styles.deleteBtn}
-              onPress={discardRecording}>
-              <Text>❌</Text>
-            </Pressable> 
-              
-            <Pressable style={styles.saveBtn}
-              onPress={saveRecording} >
-              <Text>💾</Text>
-            </Pressable>
-          </View>
+          
         </View>
       ) : (
         <View style={styles.recorder}>
@@ -548,7 +570,7 @@ const styles = StyleSheet.create({
     alignItems:"center",
     width:"100%",  
     padding:4,
-  },
+  },  
   recordingName:{
    fontWeight:"bold"
   },
@@ -558,7 +580,12 @@ const styles = StyleSheet.create({
   time: {
     color: "grey",
     fontSize:12
-  }
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+    marginTop: 20,
+  },
   
 });
 

@@ -59,8 +59,9 @@ export default function LoginScreen() {
         <Text style={styles.buttonText}>Login</Text>
       </Pressable>
 
-      <Text style={{color: "white"}}>Don't have an account?
-        <Link href={"/(auth)/register"}>  Signup </Link>  
+      <Text style={{ color: "white" }}>
+        Don't have an account?{" "}
+        <Link href={"/(auth)/register"}>Signup</Link>
       </Text>
 
     </View>

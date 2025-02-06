@@ -34,7 +34,8 @@ export default function LandingPage() {
         </Pressable>
       </View>      
 
-      <Text style={{color: "white"}}>Don't have an account?
+      <Text style={{color: "white"}}>
+        Don't have an account?{" "}
         <Link href="/(auth)/register" style={styles.signup}>
           Signup
         </Link>  

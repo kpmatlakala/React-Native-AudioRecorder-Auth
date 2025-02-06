@@ -68,14 +68,13 @@ const AllRecordingsPreview = () => {
               <Picker.Item label="All" value="all" />
               <Picker.Item label="Today" value="today" />
               <Picker.Item label="Recent" value="recent" />
-              <Picker.Item label="Favorites" value="favorites" />
-              
+              <Picker.Item label="Favorites" value="favorites" />              
             </Picker>
   
             <TextInput 
               style={styles.searchInput} 
               placeholder="Search by name" 
-              placeholderTextColor="#aaa" 
+              placeholderTextColor="white" 
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
@@ -132,7 +131,7 @@ const AllRecordingsPreview = () => {
           drawerContent={() => (
             <>            
               <View style={{flexDirection:"row",justifyContent:"space-between", alignItems:"center" }}> 
-                <Text style={styles.backLink} onPress={()=> router.push("/")}> ↩ </Text>
+                <Text style={styles.backLink} onPress={()=> router.push("/")}> ← </Text>
                 <Text style={{fontSize: 12}}>{ session?.email ? session.email : 'Audio Recorder'}</Text>
 
                 <View style={{width:64, height:64, backgroundColor:"gray", borderRadius: 50, margin:8}}>
@@ -147,7 +146,13 @@ const AllRecordingsPreview = () => {
               <AllRecordingsPreview /> 
   
               <View style={{flexDirection:"row", justifyContent:"space-between"}}>
-                <Link href="/(app)/settings" style={styles.backLink} > <Text>⚙️ Settings </Text></Link>   
+                <Link href="/(app)/settings" style={styles.settingsLink} > 
+                  <Text>⚙️ Settings </Text>
+                </Link>   
+
+                <Pressable style={styles.logoutBtn}>
+                  <Text style={styles.logoutTxt} onPress={SignOut}> Sign Out </Text>
+                </Pressable>
               </View>          
             </>
           )}
@@ -169,9 +174,10 @@ const AllRecordingsPreview = () => {
   // Styles
   const styles = StyleSheet.create({
     backLink:{
-      padding: 16,
-      backgroundColor:"#f9f9f9",
-      fontSize: 21
+      padding: 4,
+      // backgroundColor:"#f9f9f9",
+      fontSize: 32,
+      fontWeight:700
     },
     previewContainer: {
       padding: 16,
@@ -192,12 +198,12 @@ const AllRecordingsPreview = () => {
       height: 50, 
       width: 128,
       fontSize: 16, 
-      paddingHorizontal: 1, 
-      // backgroundColor:"#fff",
+      paddingHorizontal: 0, 
+      backgroundColor:"#fff",
     },
     searchInput: {
       flex: 1,
-      marginLeft: -12,
+      marginLeft: -4,
       height: 50,
       borderBottomWidth: 1,
       
@@ -244,4 +250,21 @@ const AllRecordingsPreview = () => {
       textAlign: "center",
       marginTop: 16,
     },
+    settingsLink:{
+      padding:16,
+      borderRightColor: "lightgray",
+      borderRightWidth: 1,
+    },
+    logoutBtn:{
+      padding:16,
+      backgroundColor:"red",
+      borderTopLeftRadius: 16,
+      borderBottomRightRadius: 16,
+      
+    },
+    logoutTxt:{
+      color:"#fff",
+      fontWeight: 700
+    }
+
   });

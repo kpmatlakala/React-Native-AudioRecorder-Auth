@@ -10,5 +10,4 @@ const Auth_layout = () => {
         </Stack>
     )
 }
-
 export default Auth_layout;

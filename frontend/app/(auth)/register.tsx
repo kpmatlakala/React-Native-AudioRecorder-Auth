@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { useSession } from '@/context/AuthContext';
 
 export default function SignUpScreen() {
@@ -82,8 +82,11 @@ export default function SignUpScreen() {
       <View style={styles.checkboxContainer}>        
                   
         <Text style={styles.tsNcs}> By registering to this Audio Recorder App, you agree to the 
-          <Text style={styles.checkboxText}> Terms and Conditions </Text> and the <Text style={styles.checkboxText}> Privacy Policy </Text>
-          of the app.
+          <Link href={"/PrivacyPolicyAndTerms"} >
+            <Text style={styles.checkboxText}> Terms and Conditions </Text> 
+              and the 
+            <Text style={styles.checkboxText}> Privacy Policy </Text>
+          </Link> of the app.
         </Text>
         
       </View>
