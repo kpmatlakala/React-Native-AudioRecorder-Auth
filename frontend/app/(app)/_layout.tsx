@@ -16,7 +16,8 @@ const App_Layout = () => {
   const _pathname = usePathname();
   const authRoutes = ["/login", "/register"];
 
-  if (!session && !authRoutes.includes(_pathname)) {
+  if (!session && !authRoutes.includes(_pathname)) 
+  {
     return <Redirect href={{ pathname: "/login" }} />;
   }
 

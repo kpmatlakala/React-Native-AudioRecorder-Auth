@@ -283,7 +283,10 @@ const todaysRecordings = getTodaysRecordings(); // Get the filtered recordings
                     {/* <Text>⏹️</Text> */}
                 </Pressable> 
 
-                <Text>{formatTime(playbackTime)} / {formatTime(totalPlaybackTime)}</Text>
+                <View style={{ width:"100%", flexDirection:"row", justifyContent:"space-around" }}>
+                  <Text>{formatTime(playbackTime)} </Text> 
+                  <Text> {formatTime(totalPlaybackTime)}</Text>
+                </View>
 
                 {/* Progress Bar */}
                 <Slider

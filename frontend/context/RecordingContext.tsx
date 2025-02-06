@@ -18,8 +18,7 @@ export default function RecordingProvider({ children })
 {
     const [recordings, setRecordings] = useState([]);
     const [currentRecording, setCurrentRecording] = useState("");
-    const [audioFormat, setAudioFormat] = useState('m4a');  // Default to M4A
-    
+    const [audioFormat, setAudioFormat] = useState('m4a');  // Default to M4A    
 
     useEffect(() => {
         // const fetchRecordings = async () => {
@@ -67,12 +66,12 @@ export default function RecordingProvider({ children })
     const backupRecordingToCloud = async (recording: any) => {
         const userId = auth.currentUser?.uid;
         if (userId) {
-            try {
-                const recordingDocRef = doc(db, 'recordings', userId, recording.id);
-                await setDoc(recordingDocRef, { ...recording, timestamp: Timestamp.fromMillis(recording.timestamp) });
-            } catch (error) {
-                console.error('Error saving recording to cloud:', error);
-            }
+            try 
+            {
+              const recordingDocRef = doc(db, 'recordings', userId, recording.id);
+              await setDoc(recordingDocRef, { ...recording, timestamp: Timestamp.fromMillis(recording.timestamp) });
+            } 
+            catch (error) { console.error('Error saving recording to cloud:', error); }
         }
     };
 
